@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User, UserRole } from './user.entity';
@@ -26,8 +26,16 @@ export class UsersService {
     password: string,
     role: UserRole = 'regular',
   ): Promise<User> {
-    const newUser = this.usersRepository.create({ username, password, role });
-    return this.usersRepository.save(newUser);
+    try {
+      const newUser = this.usersRepository.create({ username, password, role });
+      return await this.usersRepository.save(newUser);
+    } catch (error) {
+      // For Postgres + TypeORM, code '23505' typically means a unique constraint violation
+      if (error.code === '23505') {
+        throw new ConflictException('Username is already taken');
+      }
+      throw error;
+    }
   }
 
   async updateUser(id: string, user: User): Promise<User | null> {
