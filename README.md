@@ -22,6 +22,43 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
+## Descripción del proyecto
+
+Esta aplicación está desarrollada con NestJS y TypeORM, utilizando una base de datos alojada en Supabase. Implementa un sistema de autenticación con Passport (estrategia JWT), control de roles (usuarios “regulares” y “administradores”) y un módulo de “películas” que permite:
+
+- Registro y login de usuarios.
+- Gestión de películas (listar, obtener detalles, crear, actualizar, eliminar).
+- Sincronización automática (cron) de películas desde la API pública de Star Wars.
+- La documentación generada con Swagger se encuentra en la ruta /api (por defecto, http://localhost:3000/api).
+
+## Herramientas principales
+
+- NestJS: Framework para construir la API.
+- TypeORM: Mapeo Objeto-Relacional para la persistencia de datos.
+- Supabase: Base de datos PostgreSQL administrada.
+- Passport + JWT: Autenticación y protección de rutas.
+- Swagger: Documentación de endpoints.
+
+## Pasos de instalación y ejecución
+
+1. Clonar este repositorio.
+2. Instalar dependencias:
+
+```bash
+npm install
+```
+
+3. Configurar variables de entorno (crear un archivo .env con DATABASE_URL, JWT_SECRET).
+4. Ejecutar en modo desarrollo:
+
+```bash
+npm run start:dev
+```
+
+5. Visitar http://localhost:3000/api para ver la documentación de Swagger.
+
+¡Listo! Con estos pasos podrás explorar los endpoints de autenticación, usuarios y películas, y probar sus funcionalidades.
+
 ## Description
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
