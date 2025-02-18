@@ -17,12 +17,25 @@ import { MoviesModule } from './movies/movies.module';
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
-        url: configService.get('DATABASE_URL'),
-        autoLoadEntities: true,
-        synchronize: true,
-      }),
+      useFactory: (configService: ConfigService) => {
+        if (process.env.NODE_ENV === 'test') {
+          // Use SQLite in-memory for testing
+          return {
+            type: 'sqlite',
+            database: ':memory:',
+            autoLoadEntities: true,
+            synchronize: true,
+          };
+        } else {
+          // Otherwise, use Postgres (Supabase)
+          return {
+            type: 'postgres',
+            url: configService.get<string>('DATABASE_URL'),
+            autoLoadEntities: true,
+            synchronize: true, // set to false in production!!!!!!!!
+          };
+        }
+      },
       inject: [ConfigService],
     }),
     UsersModule,

@@ -17,7 +17,7 @@ import {
 } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { User, UserRole } from './user.entity';
-import { Roles } from 'src/auth/roles.decorator';
+import { Roles } from '../auth/roles.decorator';
 @ApiTags('users')
 @Controller('users')
 export class UsersController {

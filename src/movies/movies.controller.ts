@@ -20,7 +20,7 @@ import {
 } from '@nestjs/swagger';
 import { MoviesService } from './movies.service';
 import { Movie } from './movie.entity';
-import { Roles } from 'src/auth/roles.decorator';
+import { Roles } from '../auth/roles.decorator';
 import { UserRole } from '../users/user.entity';
 @ApiTags('movies')
 @Controller('movies')
