@@ -1,6 +1,9 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
-export type UserRole = 'admin' | 'regular';
+export enum UserRole {
+  ADMIN = 'admin',
+  REGULAR = 'regular',
+}
 
 @Entity()
 export class User {
@@ -13,6 +16,6 @@ export class User {
   @Column()
   password: string; // store hashed passwords
 
-  @Column({ default: 'regular' })
+  @Column({ default: UserRole.REGULAR })
   role: UserRole;
 }

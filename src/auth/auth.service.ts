@@ -18,8 +18,8 @@ export class AuthService {
     if (!user) return null;
     const match = await bcrypt.compare(plainPassword, user.password);
     if (!match) return null;
-    // this is to exclude the password from the user object returned
-    const { password, ...result } = user; // eslint-disable-line @typescript-eslint/no-unused-vars
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...result } = user;
     return result;
   }
 
@@ -36,8 +36,6 @@ export class AuthService {
       hashedPassword,
       role as UserRole,
     );
-    // this is to exclude the password from the user object returned
-    const { password, ...result } = newUser; // eslint-disable-line @typescript-eslint/no-unused-vars
-    return result;
+    return newUser;
   }
 }

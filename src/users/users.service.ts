@@ -9,12 +9,18 @@ export class UsersService {
     @InjectRepository(User) private usersRepository: Repository<User>,
   ) {}
 
-  async findAll(): Promise<User[]> {
-    return this.usersRepository.find();
+  async findAll(): Promise<Omit<User, 'password'>[]> {
+    const users = await this.usersRepository.find();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    return users.map(({ password, ...rest }) => rest);
   }
 
-  async findOne(id: string): Promise<User | null> {
-    return this.usersRepository.findOne({ where: { id } });
+  async findOne(id: string): Promise<Omit<User, 'password'> | null> {
+    const user = await this.usersRepository.findOne({ where: { id } });
+    if (!user) return null;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...rest } = user;
+    return rest;
   }
 
   async findByUsername(username: string): Promise<User | null> {
@@ -24,11 +30,14 @@ export class UsersService {
   async createUser(
     username: string,
     password: string,
-    role: UserRole = 'regular',
-  ): Promise<User> {
+    role: UserRole = UserRole.REGULAR,
+  ): Promise<Omit<User, 'password'>> {
     try {
       const newUser = this.usersRepository.create({ username, password, role });
-      return await this.usersRepository.save(newUser);
+      const savedUser = await this.usersRepository.save(newUser);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password: _password, ...rest } = savedUser;
+      return rest;
     } catch (error) {
       // For Postgres + TypeORM, code '23505' typically means a unique constraint violation
       if (error.code === '23505') {
@@ -38,7 +47,18 @@ export class UsersService {
     }
   }
 
-  async updateUser(id: string, user: User): Promise<User | null> {
+  async updateUserRole(
+    id: string,
+    newRole: UserRole,
+  ): Promise<Omit<User, 'password'> | null> {
+    await this.usersRepository.update(id, { role: newRole });
+    return this.findOne(id);
+  }
+
+  async updateUser(
+    id: string,
+    user: User,
+  ): Promise<Omit<User, 'password'> | null> {
     await this.usersRepository.update(id, user);
     return this.findOne(id);
   }
